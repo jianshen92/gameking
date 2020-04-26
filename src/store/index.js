@@ -19,6 +19,7 @@ export default new Vuex.Store({
     // By jian shen
     lobbyId: '',
     gameName: '',
+    lobbyPlayers: [],
 
     // end
     connected: false,
@@ -86,8 +87,9 @@ export default new Vuex.Store({
     // By jian shen
     SOCKET_JOIN_LOBBY(state, message){
       state.lobbyId = message.lobby_id;
+      state.lobbyPlayers = message.lobby_info.players;
       console.log("user " + state.username + " has joined lobby:" + state.lobbyId)
-      console.log(message.lobby_info.players)
+
     },
 
     SET_GAME(state, payload){
@@ -95,9 +97,15 @@ export default new Vuex.Store({
     },
 
     SOCKET_LEAVE_LOBBY(state, message){
-      state.lobbyId = ""
+      state.lobbyId = "";
+      state.lobbyPlayers = message.lobby_info.players;
       console.log(`user ${state.username} has left ${message.lobby_info.game_name} lobby ${message.lobby_info.game_id}`)
       console.log(message.lobby_info.players)
+    },
+
+    SOCKET_SOMEONE_LEFT_LOBBY(state, message){
+      console.log(`Someone has left the lobby ${message.lobby_info.game_id}`);
+      state.lobbyPlayers = message.lobby_info.players;
     },
     // end
 

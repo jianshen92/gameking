@@ -1,9 +1,24 @@
 <template>
-    <v-container d-flex flex-column justify-center align-center>
-        <h1>Spyfall - Lobby {{lobbyId}}</h1>
+    <v-container d-flex flex-column justify-center mx-10>
+        <div class="display-2 font-weight-bold text-center">Spyfall</div>
+        <div class="display-1 font-weight-light text-center">{{lobbyId}}</div>
         <v-btn text large color="primary">Start Game</v-btn>
         <v-btn text large color="primary" @click="leaveLobby">Leave Game</v-btn>
 
+        <v-container>
+            <div class="title font-weight-light text-center">Players</div>
+            <v-list>
+              <v-list-item-group dark>
+                <v-list-item
+                   v-for="player in this.lobbyPlayers" v-bind:key="player"
+                >
+                  <v-list-item-content>
+                    <v-list-item-title v-text="player"></v-list-item-title>
+                  </v-list-item-content>
+                </v-list-item>
+              </v-list-item-group>
+            </v-list>
+        </v-container>
     </v-container>
 </template>
 
@@ -17,7 +32,7 @@
       };
     },
     computed: {
-      ...mapState(['lobbyId', 'username']),
+      ...mapState(['lobbyId', 'username','lobbyPlayers']),
     },
     watch: {
     },

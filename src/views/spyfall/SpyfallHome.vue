@@ -1,14 +1,10 @@
 <template>
   <v-container d-flex flex-column justify-center align-center>
     <h1>Spyfall</h1>
+    <v-text-field label="Username" v-model="formUsername" required></v-text-field>
     <v-btn text large color="primary" @click="createLobby">Create Game</v-btn>
     <v-text-field label="Lobby ID" v-model="joinLobbyId" required></v-text-field>
     <v-btn text large color="primary" @click="joinLobby">Join Game</v-btn>
-    <v-form>
-      <v-text-field label="Username" v-model="form_username" required></v-text-field>
-      <v-btn text large color="primary" large @click="setUsername">Set Username</v-btn>
-      <div>user name is - {{username}}</div>
-    </v-form>
   </v-container>
 </template>
 
@@ -19,7 +15,6 @@
     name: "spyfall-home",
     data() {
       return {
-        form_username: this.username,
         joinLobbyId:''
       };
     },
@@ -30,6 +25,14 @@
       ...mapState(['lobbyId', 'username', 'gameName']),
       room_id() {
         return this.room_num.toUpperCase();
+      },
+      formUsername: {
+        get () {
+          return this.username
+        },
+        set (value) {
+          this.set_username(value)
+        }
       }
     },
     watch: {
@@ -48,9 +51,6 @@
         'setGame',
       ]),
       ...mapMutations(["set_username", "set_room"]),
-      setUsername(){
-        this.set_username(this.form_username);
-      },
       createLobby(){
         console.log("create lobby")
         const params = {

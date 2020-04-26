@@ -154,13 +154,6 @@
       >
         <v-icon medium>home</v-icon> Home
       </v-btn>
-      <v-btn
-        text
-        replace
-        :to="{ name: 'CodewordsHome' }"
-      >
-        <v-icon medium>home</v-icon> Home
-      </v-btn>
       <v-spacer></v-spacer>
       <v-btn
         text

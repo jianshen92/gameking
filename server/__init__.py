@@ -49,7 +49,6 @@ def on_create_lobby(data):
     """Create a generic game lobby"""
     game_name = data["gameName"]
     username = data["username"]
-    print(game_name, username)
 
     lobby = game.Lobby(game_name=game.GameName[game_name])
     lobby.add_player(username)
@@ -58,6 +57,8 @@ def on_create_lobby(data):
     LOBBIES[lobby_id] = lobby
     join_room(lobby_id)
 
+    print("--create lobby--")
+    print(lobby.lobby_info()["players"])
     emit('join_lobby', {
         'lobby_id': lobby_id,
         'lobby_info': lobby.lobby_info()
@@ -77,6 +78,8 @@ def on_join_lobby(data):
     join_room(lobby_id)
     lobby = LOBBIES[lobby_id]
     lobby.add_player(username)
+    print("--join lobby--")
+    print(lobby.lobby_info()["players"])
     emit('join_lobby', {
         'lobby_id': lobby_id,
         'lobby_info': lobby.lobby_info()
@@ -93,10 +96,18 @@ def on_leave(data):
     # remove player and rebroadcast game object
     lobby.remove_player(username)
     leave_room(lobby_id)
+
+    # Send to the user who left the lobby
     emit('leave_lobby', {
         'lobby_id': lobby_id,
         'lobby_info': lobby.lobby_info()
     })
+
+    # Send to the users who are still in lobby
+    emit('someone_left_lobby', {
+        'lobby_id': lobby_id,
+        'lobby_info': lobby.lobby_info()
+    }, room=lobby_id)
 
 def prune():
     """Prune rooms stale for more than 6 hours"""
