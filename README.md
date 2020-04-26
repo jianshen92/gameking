@@ -1,27 +1,18 @@
-# codenames
+# Game King
 
-> Realtime webapp implementation of the classic social word game, Codenames, designed to be played on a TV and mobile devices. Based on a project by [sprek](https://github.com/sprek).
+> Hub for Web Page Based Social Games
 
-## Blog Series
+> Modification from [codenames](https://github.com/joshporter1/codenames).
 
-To read more about how this project came to fruition and how to build an app using the same technologies, follow the links below!
+## Tech Stack
+#### Front End
+* Vue
+* Vuex
+* Vuetify
+* Webpack
 
-* __Part 1__ - [Introduction and Planning](https://secdevops.ai/weekend-project-part-1-creating-a-real-time-web-based-application-using-flask-vue-and-socket-b71c73f37df7)
-* __Part 2__ - [Enabling Websockets in Flask using Flask-SocketIO](https://secdevops.ai/weekend-project-part-2-turning-flask-into-a-real-time-websocket-server-using-flask-socketio-ab6b45f1d896)
-* __Part 3__ - [Scaffolding a Vue App with vue-cli and Managing State with Vuex](https://secdevops.ai/weekend-project-part-3-centralizing-state-management-with-vuex-5f4387ebc144)
-* __Part 4__ - [Integrating Websockets into a Real-Time Vue App with Socket.io and Vuex](https://secdevops.ai/weekend-project-part-4-integrating-websockets-into-a-real-time-vue-app-with-socket-io-and-vuex-e358e04f477c)
-
-For content related to development, security, devops, AI, etc... check out [SecDevOps.AI](https://secdevops.ai)!
-
-<p>
-  <img src="screenshots/player-full.png" alt="Large Player View">
-  <img src="screenshots/player-mobile.png" alt="Player - mobile" width="49%">
-  <img src="screenshots/spymaster-mobile.png" alt="Spymaster - mobile" width="49%">
-</p>
-
-## Rules
-
-Rules for codenames can be found [here](https://en.wikipedia.org/wiki/Codenames_(board_game)#Rules).
+#### Back End
+* Flask + Socketio
 
 ## Development
 
