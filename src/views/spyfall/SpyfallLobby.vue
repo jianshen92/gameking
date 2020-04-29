@@ -10,7 +10,7 @@
             <v-list>
               <v-list-item-group dark>
                 <v-list-item
-                   v-for="player in this.lobbyPlayers" v-bind:key="player"
+                   v-for="player in lobbyPlayers" v-bind:key="player"
                 >
                   <v-list-item-content>
                     <v-list-item-title v-text="player"></v-list-item-title>
