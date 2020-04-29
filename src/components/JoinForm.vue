@@ -16,8 +16,6 @@
 </template>
 
 <script>
-import { mapMutations } from "vuex";
-
 export default {
   name: "create-form",
   data() {
@@ -36,13 +34,10 @@ export default {
     }
   },
   methods: {
-    ...mapMutations(["set_username", "set_room"]),
     joinGame() {
-      // this.set_username(this.username);
       this.showInputError = false;
       if (this.room_num) {
-        this.set_room(this.room_id);
-        this.$router.push({ name: "Player", params: { room: this.room_id } });
+        this.$emit("join-game", { room_id: this.room_id })
       } else {
         this.showInputError = true;
       }
