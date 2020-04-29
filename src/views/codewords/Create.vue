@@ -6,7 +6,7 @@
       </v-avatar>
       <h1 class="cn-text">Codewords</h1>
       <create-form></create-form>
-      <v-btn block color="secondary" large to="home">Back</v-btn>
+      <v-btn block color="secondary" large to="/">Back</v-btn>
     </v-flex>
   </v-layout>
 </template>
