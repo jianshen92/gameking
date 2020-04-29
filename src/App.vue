@@ -122,7 +122,7 @@
       <v-alert
         color="error"
         icon="warning"
-        value="true"
+        :value="true"
         v-if="error"
         fixed
       >
