@@ -2,7 +2,7 @@
     <v-container d-flex flex-column justify-center mx-10>
         <div class="display-2 font-weight-bold text-center">Spyfall</div>
         <div class="display-1 font-weight-light text-center">{{lobbyId}}</div>
-        <v-btn text large color="primary">Start Game</v-btn>
+        <v-btn text large color="primary" @click="startGame">Start Game</v-btn>
         <v-btn text large color="primary" @click="leaveLobby">Leave Game</v-btn>
 
         <v-container>
@@ -34,9 +34,21 @@
     computed: {
       ...mapState(['lobbyId', 'username','lobbyPlayers']),
     },
-    watch: {
+    sockets: {
+        game_start() {
+            this.start_game();
+            this.$router.push({name: "SpyfallGame"})
+        }
     },
     methods: {
+      ...mapMutations(["start_game"]),
+      startGame(){
+          const params = {
+            username: this.username,
+            lobbyId: this.lobbyId
+          };
+          this.$socket.emit('spyfall_start_game', params);
+      },
       leaveLobby(){
         console.log(`${this.username} is leaving lobby ${this.lobbyId}`);
         const params = {

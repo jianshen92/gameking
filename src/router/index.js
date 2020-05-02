@@ -12,6 +12,7 @@ import Spymaster from '@/views/codewords/Spymaster';
 // Spyfall View
 import SpyfallHome from '@/views/spyfall/SpyfallHome';
 import SpyfallLobby from '@/views/spyfall/SpyfallLobby';
+import SpyfallGame from '@/views/spyfall/SpyfallGame';
 
 Vue.use(Router);
 
@@ -59,6 +60,11 @@ export default new Router({
       path: '/spyfall/lobby',
       name: 'SpyfallLobby',
       component: SpyfallLobby,
+    },
+    {
+      path: '/spyfall/game',
+      name: 'SpyfallGame',
+      component: SpyfallGame,
     },
   ],
 });

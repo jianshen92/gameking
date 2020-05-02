@@ -20,6 +20,7 @@ export default new Vuex.Store({
     lobbyId: '',
     gameName: '',
     lobbyPlayers: [],
+    inGame: 0,
 
     // end
     connected: false,
@@ -78,7 +79,7 @@ export default new Vuex.Store({
   },
   actions: {
     setGame({commit}, payload) {
-      commit('SET_GAME', {
+      commit('setGame', {
         gameName: payload.gameName
       })
     }
@@ -92,10 +93,6 @@ export default new Vuex.Store({
 
     },
 
-    SET_GAME(state, payload){
-      state.gameName = payload.gameName
-    },
-
     SOCKET_LEAVE_LOBBY(state, message){
       state.lobbyId = "";
       state.lobbyPlayers = message.lobby_info.players;
@@ -106,6 +103,20 @@ export default new Vuex.Store({
     SOCKET_SOMEONE_LEFT_LOBBY(state, message){
       console.log(`Someone has left the lobby ${message.lobby_info.game_id}`);
       state.lobbyPlayers = message.lobby_info.players;
+    },
+
+    start_game(state){
+      console.log("vx start game");
+      state.inGame = 1;
+    },
+
+    end_game(state){
+      console.log("vx end game");
+      state.inGame = 0;
+    },
+
+    setGame(state, payload){
+      state.gameName = payload.gameName
     },
     // end
 

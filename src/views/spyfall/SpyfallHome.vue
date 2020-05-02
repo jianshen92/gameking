@@ -19,6 +19,7 @@
       };
     },
     mounted: function () {
+      console.log("hello")
       this.setGame({gameName: "SPYFALL"});
     },
     computed: {
@@ -53,6 +54,7 @@
       ...mapMutations(["set_username", "set_room"]),
       createLobby(){
         console.log("create lobby")
+        console.log(this.gameName)
         const params = {
           gameName: this.gameName,
           username: this.username

@@ -109,6 +109,7 @@ def on_leave(data):
         'lobby_info': lobby.lobby_info()
     }, room=lobby_id)
 
+
 def prune():
     """Prune rooms stale for more than 6 hours"""
     def delete_room(gid):
