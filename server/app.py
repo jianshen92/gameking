@@ -213,8 +213,8 @@ def stats():
     """display room stats"""
     resp = {
         "total": len(ROOMS.keys()),
-        "total_lobbies": len(GAMES.keys()),
-        "bytes_used": getsizeof(ROOMS),
+        "total_games": len(GAMES.keys()),
+        "bytes_used": getsizeof(GAMES),
     }
     if "rooms" in request.args:
         if ROOMS:

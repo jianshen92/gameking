@@ -1,0 +1,23 @@
+version: '3'
+services:
+  flask:
+    build:
+      context: .
+      dockerfile: ./compose/flask/Dockerfile
+    ports:
+      - "5000:5000"
+    volumes:
+      - ./server:/app
+  vue:
+    build:
+      context: .
+      dockerfile: ./compose/vue/Dockerfile
+    volumes:
+      - .:/app
+      - /app/node_modules
+    links:
+      - flask
+    depends_on:
+      - flask
+    ports:
+      - "8080:8080"
