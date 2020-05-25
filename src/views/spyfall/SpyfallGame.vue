@@ -1,6 +1,12 @@
 <template>
-  <v-container d-flex flex-column justify-center mx-10>
+  <v-container d-flex flex-column justify-center mx-md-10 fluid>
     <div class="display-1 font-weight-bold text-center">Spyfall</div>
+    <div v-if="isGameEnd" class="title text-center">
+      Time has ran out. Game Ends.
+    </div>
+    <div v-else class="title text-center">
+      <CountdownTimer @timeout="onTimeout" :endTime="endTime"/>
+    </div>
     <v-progress-circular
       indeterminate
       color="primary"
@@ -18,32 +24,36 @@
             cols="12"
             sm="6"
           >
-            <v-card shaped class="mx-2 my-1 px-3 py-1">
-              {{location}}
-            </v-card>
+            <SpyfallCard :location="location"/>
           </v-col>
       </v-row>
     </div>
     <v-btn text large color="primary" @click="endGame">End Game</v-btn>
   </v-container>
 </template>
+
 <script>
   import {mapState, mapGetters, mapMutations} from 'vuex';
+  import CountdownTimer from '@/components/common/CountdownTimer';
+  import SpyfallCard from '@/components/spyfall/SpyfallCard'
 
   export default {
     name: "spyfall-game",
+    components: {CountdownTimer, SpyfallCard},
     data: function() {
       return {
           locationList: [],
           isSpy: false,
           location: null,
           startTime: null,
+          endTime: null,
           gameDurationMinutes: null,
           isLoading: true,
+          isGameEnd: false,
       };
     },
     computed: {
-      ...mapState(['lobbyId', 'username','lobbyPlayers']),
+      ...mapState(['lobbyId', 'username','lobbyPlayers'])
     },
     created: function() {
       const params = {
@@ -58,9 +68,10 @@
         this.locationList = message.location_list;
         this.location = message.location;
         this.startTime = message.game_start_time;
+        this.endTime = message.game_end_time;
         this.gameDurationMinutes = message.game_time_minutes;
         this.isSpy = (playerRole == "SPY");
-        this.isLoading = false
+        this.isLoading = false;
       },
       spyfall_end_game(){
         this.end_game();
@@ -69,6 +80,9 @@
     },
     methods: {
       ...mapMutations(["end_game"]),
+      onTimeout(){
+          this.isGameEnd = true
+      },
       endGame(){
         const params = {
           username: this.username,

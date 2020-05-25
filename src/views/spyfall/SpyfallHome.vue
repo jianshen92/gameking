@@ -1,5 +1,5 @@
 <template>
-  <v-container d-flex flex-column justify-center align-center>
+  <v-container d-flex flex-column justify-center align-center fluid>
     <h1>Spyfall</h1>
     <v-text-field label="Username" v-model="formUsername" required></v-text-field>
     <v-btn text large color="primary" @click="createLobby">Create Game</v-btn>

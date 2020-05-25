@@ -78,8 +78,7 @@ def on_create_lobby(data):
     print("--create lobby--")
     print(game_lobby.lobby_info()["players"])
     emit(
-        "join_lobby",
-        {"lobby_id": lobby_id, "lobby_info": game_lobby.lobby_info()},
+        "join_lobby", {"lobby_id": lobby_id, "lobby_info": game_lobby.lobby_info()},
     )
 
 
@@ -123,8 +122,7 @@ def on_leave(data):
 
     # Send to the user who left the lobby
     emit(
-        "leave_lobby",
-        {"lobby_id": lobby_id, "lobby_info": game_lobby.lobby_info()},
+        "leave_lobby", {"lobby_id": lobby_id, "lobby_info": game_lobby.lobby_info()},
     )
 
     # Send to the users who are still in lobby
@@ -187,8 +185,7 @@ def prune():
     def is_stale(room):
         """Stale rooms are older than 6 hours, or have gone 20 minutes less than 5 minutes of total playtime"""
         return (
-            (datetime.now() - room.date_modified).total_seconds()
-            >= (60 * 60 * 24)
+            (datetime.now() - room.date_modified).total_seconds() >= (60 * 60 * 24)
         ) or (
             (datetime.now() - room.date_modified).total_seconds() >= (60 * 20)
             and room.playtime() <= 5

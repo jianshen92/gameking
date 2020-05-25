@@ -1,5 +1,5 @@
 <template>
-    <v-container d-flex flex-column justify-center mx-10>
+    <v-container d-flex flex-column justify-center mx-md-10 fluid>
         <div class="display-2 font-weight-bold text-center">Spyfall</div>
         <div class="display-1 font-weight-light text-center">{{lobbyId}}</div>
         <v-btn text large color="primary" @click="startGame">Start Game</v-btn>

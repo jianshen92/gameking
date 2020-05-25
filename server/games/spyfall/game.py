@@ -56,6 +56,7 @@ class Spyfall(Game):
         self._assign_role()
         self._set_location()
         self._set_start_time()
+        self._set_end_time()
 
     def game_info(self):
         return {
@@ -63,6 +64,7 @@ class Spyfall(Game):
             "game_time_minutes": self.game_time_minutes,
             "player_roles": self.player_roles,
             "game_start_time": self.game_start_time,
+            "game_end_time": self.game_end_time,
             "location": self.location,
             "location_list": self.location_list,
         }
@@ -73,9 +75,7 @@ class Spyfall(Game):
         players_roles = {}
         for player in players:
             players_roles[player] = {
-                "role": (
-                    Roles.SPY.name if player in spies else Roles.PLAYER.name
-                )
+                "role": (Roles.SPY.name if player in spies else Roles.PLAYER.name)
             }
 
         self.player_roles = players_roles
@@ -83,6 +83,9 @@ class Spyfall(Game):
     def _set_start_time(self):
         self.game_start_time = time.time()
         print(f"Start time : {self.game_start_time}")
+
+    def _set_end_time(self):
+        self.game_end_time = self.game_start_time + self.game_time_minutes * 60
 
     def _set_location(self):
         self.location = random.sample(self.location_list, 1)[0]
