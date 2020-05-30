@@ -72,7 +72,7 @@
           </v-list-item-content>
         </v-list-item>
         <v-divider></v-divider>
-        <v-subheader>Support Codewords.tv!</v-subheader>
+        <v-subheader>Support Gameking!</v-subheader>
         <v-list-item>
           <coffee-button></coffee-button>
         </v-list-item>
@@ -218,25 +218,25 @@ export default {
       showError: false,
       showInstallMessage: true,
       helpMenu: [
-        {
-          title: "How to Play",
-          icon: "import_contacts",
-          path: "/help"
-        },
+//        {
+//          title: "How to Play",
+//          icon: "import_contacts",
+//          path: "/help"
+//        },
         {
           title: "Contact",
           icon: "email",
-          href: "mailto:codecaffeinated@gmail.com?subject=Codenames Support"
+          href: "mailto:jianshen92@gmail.com?subject=Gameking Support"
         },
         {
           title: "Contribute",
           icon: "code",
-          href: "https://github.com/joshporter1/codenames"
+          href: "https://github.com/jianshen92/gameking"
         },
         {
           title: "Report a Bug",
           icon: "bug_report",
-          href: "https://github.com/joshporter1/codenames/issues/new"
+          href: "https://github.com/jianshen92/gameking/issues/new"
         }
       ]
     };

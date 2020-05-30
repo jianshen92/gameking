@@ -2,7 +2,7 @@
   <a
     class="bmc-button"
     target="_blank"
-    href="https://www.buymeacoffee.com/codecaffeinated"
+    href="https://www.buymeacoffee.com/gameking"
   >
     <img
       src="https://cdn.buymeacoffee.com/buttons/bmc-new-btn-logo.svg"

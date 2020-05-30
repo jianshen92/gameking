@@ -225,6 +225,13 @@ def stats():
     return jsonify(resp)
 
 
+@app.route("/prune")
+def hard_reset():
+    GAMES.clear()
+    gc.collect()
+    return jsonify({"message": "hard reset room"})
+
+
 # @socketio.on("create")
 # def on_create(data):
 #     """Create a game lobby"""
