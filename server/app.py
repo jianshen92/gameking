@@ -2,6 +2,7 @@
 # pylint: disable=C0103
 from games.spyfall.game import Spyfall
 from games.lobby import GameName
+from games.card.doudizhu import DouDiZhu
 
 import eventlet
 import logging
@@ -53,6 +54,7 @@ GAMES = {}
 
 GAME_DICT = {
     GameName.SPYFALL: Spyfall,
+    GameName.DOUDIZHU: DouDiZhu,
 }
 
 
@@ -78,7 +80,8 @@ def on_create_lobby(data):
     print("--create lobby--")
     print(game_lobby.lobby_info()["players"])
     emit(
-        "join_lobby", {"lobby_id": lobby_id, "lobby_info": game_lobby.lobby_info()},
+        "join_lobby",
+        {"lobby_id": lobby_id, "lobby_info": game_lobby.lobby_info()},
     )
 
 
@@ -92,18 +95,20 @@ def on_join_lobby(data):
         emit("error", {"error": "Unable to join room. Room does not exist."})
         return
 
-    join_room(lobby_id)
     game = GAMES[lobby_id]
     game_lobby = game.lobby
-
-    game_lobby.add_player(username)
-    print("--join lobby--")
-    print(game_lobby.lobby_info()["players"])
-    emit(
-        "join_lobby",
-        {"lobby_id": lobby_id, "lobby_info": game_lobby.lobby_info()},
-        room=lobby_id,
-    )
+    if not game_lobby.is_full():
+        join_room(lobby_id)
+        game_lobby.add_player(username)
+        print("--join lobby--")
+        print(game_lobby.lobby_info()["players"])
+        emit(
+            "join_lobby",
+            {"lobby_id": lobby_id, "lobby_info": game_lobby.lobby_info()},
+            room=lobby_id,
+        )
+    else:
+        emit("error", {"error": "Lobby is full"})
 
 
 @socketio.on("leave_lobby")
@@ -122,7 +127,8 @@ def on_leave(data):
 
     # Send to the user who left the lobby
     emit(
-        "leave_lobby", {"lobby_id": lobby_id, "lobby_info": game_lobby.lobby_info()},
+        "leave_lobby",
+        {"lobby_id": lobby_id, "lobby_info": game_lobby.lobby_info()},
     )
 
     # Send to the users who are still in lobby
@@ -175,6 +181,113 @@ def spyfall_end_game(data):
         emit("spyfall_end_game", room=lobby_id)
 
 
+"""
+-----------------------------
+DouDiZhu specific endpoints
+-----------------------------
+"""
+
+
+@socketio.on("ddz_start_game")
+def ddz_start_game(data):
+    """Start Game"""
+    username = data["username"]
+    lobby_id = data["lobbyId"]
+
+    game: DouDiZhu = GAMES[lobby_id]
+    game_lobby = game.lobby
+
+    game.start_game()
+
+    emit("game_start", {"message": "start game"}, room=lobby_id)
+
+
+@socketio.on("ddz_game_info")
+def ddz_game_info(data):
+    """Get DDZ Game Information"""
+    username = data["username"]
+    lobby_id = data["lobbyId"]
+    game: DouDiZhu = GAMES[lobby_id]
+
+    emit("ddz_game_info", game.game_info(), room=lobby_id)
+
+
+@socketio.on("ddz_bid")
+def ddz_bid(data):
+    """
+    DDZ player Bid
+    """
+    username = data["username"]
+    lobby_id = data["lobbyId"]
+    game: DouDiZhu = GAMES[lobby_id]
+
+    game.bid(player_name=username, bid=data["bidValue"])
+
+    emit("ddz_game_info", game.game_info(), room=lobby_id)
+    print(f"{username} bid for dizhu with {data['bidValue']}")
+
+
+@socketio.on("ddz_bid_pass")
+def ddz_bid(data):
+    """
+    DDZ player Pass Bid
+    """
+    username = data["username"]
+    lobby_id = data["lobbyId"]
+    game: DouDiZhu = GAMES[lobby_id]
+
+    game.bid_pass(player_name=username)
+
+    emit("ddz_game_info", game.game_info(), room=lobby_id)
+
+
+@socketio.on("ddz_play_card")
+def ddz_play_card(data):
+    """
+    DDZ player play card
+    """
+    username = data["username"]
+    lobby_id = data["lobbyId"]
+    game: DouDiZhu = GAMES[lobby_id]
+
+    played = game.play_cards(player_name=username, raw_cards=data["cardsPlayed"])
+
+    if played:
+        emit("ddz_game_info", game.game_info(), room=lobby_id)
+        print(f"{username} played cards {data['cardsPlayed']}")
+        emit("ddz_played_successful", {"player": username}, room=lobby_id)
+
+
+@socketio.on("ddz_pass")
+def ddz_pass(data):
+    """
+    DDZ player pass
+    """
+    username = data["username"]
+    lobby_id = data["lobbyId"]
+    game: DouDiZhu = GAMES[lobby_id]
+
+    game.player_pass(player_name=username)
+
+    print(f"{username} passed")
+    emit("ddz_game_info", game.game_info(), room=lobby_id)
+
+
+@socketio.on("ddz_restart")
+def ddz_pass(data):
+    """
+    DDZ player restart game/start new game
+    """
+    username = data["username"]
+    lobby_id = data["lobbyId"]
+    game: DouDiZhu = GAMES[lobby_id]
+
+    game.restart_game()
+
+    print(f"Starting a new game")
+    emit("ddz_game_info", game.game_info(), room=lobby_id)
+
+
 def prune():
     """Prune rooms stale for more than 6 hours"""
 
@@ -198,6 +311,13 @@ def prune():
                 delete_room(key)
         del rooms
         gc.collect()
+
+
+"""
+-----------------------------
+Synchronous Endpoints
+-----------------------------
+"""
 
 
 @app.route("/debug-sentry")
@@ -230,6 +350,22 @@ def hard_reset():
     GAMES.clear()
     gc.collect()
     return jsonify({"message": "hard reset room"})
+
+
+@app.route("/games")
+def games():
+    # breakpoint()
+    return jsonify(
+        {
+            "games": {
+                key: {
+                    "game_info": value.game_info(),
+                    "lobby_info": value.lobby.lobby_info(),
+                }
+                for key, value in GAMES.items()
+            }
+        }
+    )
 
 
 # @socketio.on("create")

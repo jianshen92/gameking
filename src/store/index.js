@@ -29,6 +29,7 @@ export default new Vuex.Store({
     room: '',
     username: '',
     error: null,
+    errorAlert: false,
     turn: '',
     spymasterReveal: false,
     popupHides: 0
@@ -39,6 +40,7 @@ export default new Vuex.Store({
         return Object.keys(state.game.solution);
       }
       return [];
+
     },
     tileCounts(state) {
       if (state.game.solution) {
@@ -78,7 +80,7 @@ export default new Vuex.Store({
     },
   },
   actions: {
-    setGame({commit}, payload) {
+    setGame({ commit }, payload) {
       commit('setGame', {
         gameName: payload.gameName
       })
@@ -86,36 +88,36 @@ export default new Vuex.Store({
   },
   mutations: {
     // By jian shen
-    SOCKET_JOIN_LOBBY(state, message){
+    SOCKET_JOIN_LOBBY(state, message) {
       state.lobbyId = message.lobby_id;
       state.lobbyPlayers = message.lobby_info.players;
       console.log("user " + state.username + " has joined lobby:" + state.lobbyId)
 
     },
 
-    SOCKET_LEAVE_LOBBY(state, message){
+    SOCKET_LEAVE_LOBBY(state, message) {
       state.lobbyId = "";
       state.lobbyPlayers = message.lobby_info.players;
       console.log(`user ${state.username} has left ${message.lobby_info.game_name} lobby ${message.lobby_info.game_id}`)
       console.log(message.lobby_info.players)
     },
 
-    SOCKET_SOMEONE_LEFT_LOBBY(state, message){
+    SOCKET_SOMEONE_LEFT_LOBBY(state, message) {
       console.log(`Someone has left the lobby ${message.lobby_info.game_id}`);
       state.lobbyPlayers = message.lobby_info.players;
     },
 
-    start_game(state){
+    start_game(state) {
       console.log("vx start game");
       state.inGame = 1;
     },
 
-    end_game(state){
+    end_game(state) {
       console.log("vx end game");
       state.inGame = 0;
     },
 
-    setGame(state, payload){
+    setGame(state, payload) {
       state.gameName = payload.gameName
     },
     // end
@@ -141,6 +143,7 @@ export default new Vuex.Store({
     },
     SOCKET_ERROR(state, message) {
       state.error = message.error;
+      state.errorAlert = true;
     },
     set_turn(state, team) {
       state.turn = team;
@@ -157,6 +160,7 @@ export default new Vuex.Store({
     reset_error(state) {
       state.room = null;
       state.error = null;
+      state.errorAlert = false;
     },
     reveal_spymaster(state) {
       state.spymasterReveal = true;

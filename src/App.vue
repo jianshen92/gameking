@@ -1,18 +1,8 @@
 <template>
-  <v-app
-    dark
-    id="codenames"
-  >
-    <v-navigation-drawer
-      temporary
-      right
-      app
-      v-model="drawer"
-    >
+  <v-app dark id="codenames">
+    <v-navigation-drawer temporary right app v-model="drawer">
       <v-list class="pa-1">
-        <v-list-item
-          tag="div"
-        >
+        <v-list-item tag="div">
           <v-list-item-action>
             <v-btn
               icon
@@ -26,17 +16,11 @@
             <v-list-item-title>Help</v-list-item-title>
           </v-list-item-content>
           <v-list-item-avatar>
-            <img
-              src="@/assets/logo-64x64.png"
-              alt="codenames logo"
-            />
+            <img src="@/assets/logo-64x64.png" alt="codenames logo" />
           </v-list-item-avatar>
         </v-list-item>
       </v-list>
-      <v-list
-        class="pt-0"
-        dense
-      >
+      <v-list class="pt-0" dense>
         <v-divider></v-divider>
         <v-list-item
           v-for="item in helpMenu"
@@ -46,17 +30,14 @@
           :href="item.href"
         >
           <v-list-item-action>
-            <v-icon>{{item.icon}}</v-icon>
+            <v-icon>{{ item.icon }}</v-icon>
           </v-list-item-action>
           <v-list-item-content>
-            <v-list-item-title>{{item.title}}</v-list-item-title>
+            <v-list-item-title>{{ item.title }}</v-list-item-title>
           </v-list-item-content>
         </v-list-item>
       </v-list>
-      <v-list
-        dense
-        two-line
-      >
+      <v-list dense two-line>
         <v-divider></v-divider>
         <v-list-item>
           <v-list-item-action>
@@ -64,10 +45,10 @@
           </v-list-item-action>
           <v-list-item-content>
             <v-list-item-title>
-              Socket Status: {{connected ? 'Connected' : 'Not Connected'}}
+              Socket Status: {{ connected ? "Connected" : "Not Connected" }}
             </v-list-item-title>
             <v-list-item-subtitle v-if="connected">
-              Connection Type: {{this.$socket.io.engine.transport.name}}
+              Connection Type: {{ this.$socket.io.engine.transport.name }}
             </v-list-item-subtitle>
           </v-list-item-content>
         </v-list-item>
@@ -79,41 +60,29 @@
       </v-list>
     </v-navigation-drawer>
 
-    <v-toolbar
-      app
-      fixed
-      :color="getColor"
-      v-if="!error && room"
-    >
-      <v-toolbar-title class="cn-text headline">{{room}}</v-toolbar-title>
+    <v-toolbar app fixed :color="getColor" v-if="!error && room">
+      <v-toolbar-title class="cn-text headline">{{ room }}</v-toolbar-title>
       <v-spacer></v-spacer>
-      <v-toolbar-title
-        v-if="isFirstTurn"
-        class="cn-text"
-      >{{getTurn}}</v-toolbar-title>
+      <v-toolbar-title v-if="isFirstTurn" class="cn-text">{{
+        getTurn
+      }}</v-toolbar-title>
       <!-- Scoreboard -->
-      <v-toolbar-title
-        v-else
-        class="cn-text headline"
-        id="scoreboard"
-      >
-        <span class="red--text text--darken-1">{{tileCounts.flipped.R}}</span>
-        <span
-          style="padding: 0 10px;"
-          v-if="!'G' in tileCounts.flipped"
-        >
+      <v-toolbar-title v-else class="cn-text headline" id="scoreboard">
+        <span class="red--text text--darken-1">{{ tileCounts.flipped.R }}</span>
+        <span style="padding: 0 10px" v-if="!'G' in tileCounts.flipped">
           <v-avatar size="32">
-            <img
-              src="@/assets/logo-64x64.png"
-              alt="codenames logo"
-            />
+            <img src="@/assets/logo-64x64.png" alt="codenames logo" />
           </v-avatar>
         </span>
         <span v-else> - </span>
-        <span class="blue--text text--darken-1">{{tileCounts.flipped.B}}</span>
+        <span class="blue--text text--darken-1">{{
+          tileCounts.flipped.B
+        }}</span>
         <template v-if="'G' in tileCounts.flipped">
           <span> - </span>
-          <span class="green--text text--lighten-1">{{tileCounts.flipped.G}}</span>
+          <span class="green--text text--lighten-1">{{
+            tileCounts.flipped.G
+          }}</span>
         </template>
       </v-toolbar-title>
     </v-toolbar>
@@ -121,51 +90,33 @@
     <v-content>
       <v-alert
         color="error"
-        icon="warning"
-        :value="true"
-        v-if="error"
+        :value="errorAlert"
+        dismissible
         fixed
+        @input="onAlertClose"
       >
-        {{error}}
+        {{ error }}
       </v-alert>
       <ApplePopup />
-      <v-container v-if="error">
+      <!-- <v-container v-if="error">
+        <router-view></router-view>
+      </v-container> -->
+      <v-container grey darken-4 fill-height fluid pa-2>
         <router-view></router-view>
       </v-container>
-      <v-container
-        grey darken-4
-        fill-height
-        fluid
-        pa-2
-        v-else
-      >
-        <router-view>
-        </router-view>
-      </v-container>
     </v-content>
-    <v-bottom-navigation
-      value="true"
-      app
-    >
-      <v-btn
-        text
-        replace
-        :to="{ name: 'Home' }"
-      >
+    <v-bottom-navigation value="true" app>
+      <v-btn text replace :to="{ name: 'Home' }">
         <v-icon medium>home</v-icon> Home
       </v-btn>
       <v-spacer></v-spacer>
-      <v-btn
-        text
-        v-if="!connected"
-        value="false"
-      >
+      <v-btn text v-if="!connected" value="false">
         <v-icon medium>warning</v-icon> Not Connected
       </v-btn>
       <v-btn
         text
         replace
-        :to="{ name: 'Player', params: { room: room }}"
+        :to="{ name: 'Player', params: { room: room } }"
         v-if="room && connected && !error"
       >
         <v-icon medium>person</v-icon> Agent
@@ -173,17 +124,13 @@
       <v-btn
         text
         replace
-        :to="{ name: 'Spymaster', params: { room: room }}"
+        :to="{ name: 'Spymaster', params: { room: room } }"
         v-if="room && connected && !error"
       >
         <v-icon medium>local_library</v-icon> Spymaster
       </v-btn>
       <v-spacer></v-spacer>
-      <v-btn
-        text
-        @click.stop="drawer = !drawer"
-        to="#"
-      >
+      <v-btn text @click.stop="drawer = !drawer" to="#">
         <v-icon medium>help_outline</v-icon> Help
       </v-btn>
     </v-bottom-navigation>
@@ -200,16 +147,20 @@ export default {
   components: { ApplePopup, CoffeeButton },
   created() {
     // Code to leave any existing lobbies if user refresh or close browser
-    window.addEventListener('beforeunload', () => {
+    window.addEventListener(
+      "beforeunload",
+      () => {
         //I CAN ACCESS TO this VARIABLE
         console.log(this.gameName);
         const params = {
-            gameName: this.gameName,
-            username: this.username,
-            lobbyId: this.lobbyId
+          gameName: this.gameName,
+          username: this.username,
+          lobbyId: this.lobbyId,
         };
-        this.$socket.emit('leave_lobby', params);
-    }, false)
+        this.$socket.emit("leave_lobby", params);
+      },
+      false
+    );
   },
   data() {
     return {
@@ -218,38 +169,48 @@ export default {
       showError: false,
       showInstallMessage: true,
       helpMenu: [
-//        {
-//          title: "How to Play",
-//          icon: "import_contacts",
-//          path: "/help"
-//        },
+        //        {
+        //          title: "How to Play",
+        //          icon: "import_contacts",
+        //          path: "/help"
+        //        },
         {
           title: "Contact",
           icon: "email",
-          href: "mailto:jianshen92@gmail.com?subject=Gameking Support"
+          href: "mailto:jianshen92@gmail.com?subject=Gameking Support",
         },
         {
           title: "Contribute",
           icon: "code",
-          href: "https://github.com/jianshen92/gameking"
+          href: "https://github.com/jianshen92/gameking",
         },
         {
           title: "Report a Bug",
           icon: "bug_report",
-          href: "https://github.com/jianshen92/gameking/issues/new"
-        }
-      ]
+          href: "https://github.com/jianshen92/gameking/issues/new",
+        },
+      ],
     };
   },
   computed: {
-    ...mapState(["connected", "room", "error", "game", "turn", 'lobbyId', 'username', 'gameName']),
+    ...mapState([
+      "connected",
+      "room",
+      "error",
+      "errorAlert",
+      "game",
+      "turn",
+      "lobbyId",
+      "username",
+      "gameName",
+    ]),
     ...mapGetters(["gameWon", "tileCounts"]),
     isFirstTurn() {
       if (!this.connected) {
         return true;
       }
       if (this.game.board) {
-        return Object.values(this.game.board).every(e => e === false);
+        return Object.values(this.game.board).every((e) => e === false);
       }
       return true;
     },
@@ -287,18 +248,22 @@ export default {
         default:
           return "";
       }
-    }
+    },
   },
   mounted() {
     this.$socket.emit("list_dictionaries");
   },
   methods: {
-    ...mapMutations(["set_turn"]),
-    browserClose(e){
+    ...mapMutations(["set_turn", "reset_error"]),
+    browserClose(e) {
       e.preventDefault();
-      console.log("hi")
+      console.log("hi");
     },
-  }
+    onAlertClose(e) {
+      console.log("dismiss alert");
+      this.reset_error();
+    },
+  },
 };
 </script>
 

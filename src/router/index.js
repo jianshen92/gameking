@@ -14,6 +14,11 @@ import SpyfallHome from '@/views/spyfall/SpyfallHome';
 import SpyfallLobby from '@/views/spyfall/SpyfallLobby';
 import SpyfallGame from '@/views/spyfall/SpyfallGame';
 
+// Doudizhu View
+import DouDiZhuHome from '@/views/doudizhu/DouDiZhuHome';
+import DouDiZhuLobby from '@/views/doudizhu/DouDiZhuLobby';
+import DouDiZhuGame from '@/views/doudizhu/DouDiZhuGame';
+
 Vue.use(Router);
 
 export default new Router({
@@ -24,7 +29,7 @@ export default new Router({
       name: 'Home',
       component: Home,
     },
-      // Codewords
+    // Codewords
     {
       path: '/codewords',
       name: 'CodewordsHome',
@@ -50,7 +55,7 @@ export default new Router({
       name: 'Spymaster',
       component: Spymaster,
     },
-      // Spyfall
+    // Spyfall
     {
       path: '/spyfall',
       name: 'SpyfallHome',
@@ -66,5 +71,21 @@ export default new Router({
       name: 'SpyfallGame',
       component: SpyfallGame,
     },
+    // Doudizhu
+    {
+      path: '/doudizhu',
+      name: 'DouDiZhuHome',
+      component: DouDiZhuHome
+    },
+    {
+      path: '/doudizhu/lobby',
+      name: 'DouDiZhuLobby',
+      component: DouDiZhuLobby
+    },
+    {
+      path: '/doudizhu/game',
+      name: 'DouDiZhuGame',
+      component: DouDiZhuGame
+    }
   ],
 });

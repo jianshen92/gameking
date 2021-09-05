@@ -5,6 +5,8 @@ from enum import Enum
 import random
 import time
 
+from typing import List
+
 
 class Roles(Enum):
     SPY = 1
@@ -12,8 +14,8 @@ class Roles(Enum):
 
 
 class Spyfall(Game):
-    game_name = "Spyfall"
-    location_list = [
+    game_name: str = "Spyfall"
+    location_list: List[str] = [
         "Beach",
         "Broadway Theater",
         "Casino",
@@ -42,13 +44,16 @@ class Spyfall(Game):
         "Polar Station",
         "Space Station",
     ]
+    min_player = 3
+    max_player = 16
 
     def __init__(self, number_of_spies: int = 1, game_time_minutes: int = 8):
-        super().__init__()
+        super().__init__(min_player=self.min_player, max_player=self.max_player)
         self.number_of_spies = number_of_spies
         self.game_time_minutes = game_time_minutes
         self.player_roles = None
         self.game_start_time = None
+        self.game_end_time = None
         self.location = None
 
     def start_game(self):
@@ -60,6 +65,7 @@ class Spyfall(Game):
 
     def game_info(self):
         return {
+            "game_name": self.game_name,
             "number_of_spies": self.number_of_spies,
             "game_time_minutes": self.game_time_minutes,
             "player_roles": self.player_roles,

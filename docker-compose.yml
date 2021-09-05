@@ -8,6 +8,8 @@ services:
       - "5000:5000"
     volumes:
       - ./server:/app
+    stdin_open: true # Add this line into your service
+    tty: true
   vue:
     build:
       context: .
