@@ -23,7 +23,7 @@
     "vue": "^2.6.11",
     "vue-resize-text": "^0.1.1",
     "vue-router": "^3.1.6",
-    "vue-socket.io": "^2.1.1",
+    "vue-socket.io": "^3.0.10",
     "vuetify": "^2.2.26",
     "vuex": "^3.3.0",
     "vuex-persistedstate": "^2.7.1",
