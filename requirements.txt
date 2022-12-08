@@ -5,7 +5,7 @@ backcall==0.2.0
 bidict==0.21.2
 black==21.6b0
 blinker==1.4
-certifi==2020.4.5.1
+certifi==2022.12.7
 click==7.1.2
 decorator==5.0.9
 dill==0.3.4
